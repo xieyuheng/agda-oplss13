@@ -1,16 +1,5 @@
+open import Agda.Primitive
 module Preliminaries where
-
-  -- universe levels
-  postulate
-    Level : Set
-    lZ : Level
-    lS : Level -> Level
-    lmax : Level -> Level -> Level
-
-  {-# BUILTIN LEVEL     Level #-}
-  {-# BUILTIN LEVELZERO lZ  #-}
-  {-# BUILTIN LEVELSUC  lS   #-}
-  {-# BUILTIN LEVELMAX lmax #-}
 
   -- ----------------------------------------------------------------------
   -- functions
@@ -71,7 +60,7 @@ module Preliminaries where
   record Unit : Set where
     constructor <>
 
-  record Σ {l1 l2 : Level} {A : Set l1} (B : A -> Set l2) : Set (lmax l1 l2) where
+  record Σ {l1 l2 : Level} {A : Set l1} (B : A -> Set l2) : Set (l1 ⊔ l2) where
     constructor _,_
     field
       fst : A
@@ -80,7 +69,7 @@ module Preliminaries where
 
   infixr 0 _,_
 
-  _×_ : {l1 l2 : Level} → Set l1 -> Set l2 -> Set (lmax l1 l2)
+  _×_ : {l1 l2 : Level} → Set l1 -> Set l2 -> Set (l1 ⊔ l2)
   A × B = Σ (\ (_ : A) -> B)
 
   infixr 10 _×_
@@ -129,8 +118,8 @@ module Preliminaries where
 
     -- let's you use numerals for Nat
     {-# BUILTIN NATURAL Nat #-}
-    {-# BUILTIN SUC S #-}
-    {-# BUILTIN ZERO Z #-}
+    -- {-# BUILTIN SUC S #-}
+    -- {-# BUILTIN ZERO Z #-}
 
     _+_ : Nat → Nat → Nat
     Z + n = n
