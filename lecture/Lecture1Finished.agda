@@ -73,8 +73,7 @@ module lecture.Lecture1Finished where
 
       -- Proof 2: case-analyze h
 
-      blackenRoot-bh2 : (t : Tree) (n : Nat) -> HasBH t n
-                      -> Σ \m -> (HasBH (blackenRoot t) m)
+      blackenRoot-bh2 : (t : Tree) (n : Nat) -> HasBH t n -> Σ \m -> (HasBH (blackenRoot t) m)
       blackenRoot-bh2 .Empty .1 HBH-Empty = _ , HBH-Empty
       blackenRoot-bh2 .(Node l Red kv r) .n (HBH-Node-Red n l r kv hl hr) = _ , (HBH-Node-Black n l r kv hl hr)
       blackenRoot-bh2 .(Node l Black kv r) .(S n) (HBH-Node-Black n l r kv hl hr) = S n , HBH-Node-Black n l r kv hl hr
