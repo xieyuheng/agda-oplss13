@@ -120,10 +120,31 @@
   * black-high:empty
   | 1 black-high:empty
   * :black-high:left :black-high:right black-high:red
-  | _ :black-high:left :black-high:right black-high:red
+  | _ :black-high:left :black-high:right black-high:black
   * :black-high:left :black-high:right black-high:black
   | _ :black-high:left :black-high:right black-high:black
 ; proof-theorem
+
+: black-high:example
+  assume
+    k1 (-> key)
+    k2 (-> key)
+    v1 (-> value)
+    v2 (-> value)
+  : t (-> tree)
+    empty empty red k1 v1 node
+                         empty black k2 v2 node
+  ; define-function
+  : black-high:t
+    (-------------->
+     t 2 black-high)
+    black-high:empty
+    black-high:empty
+    black-high:red
+    black-high:empty
+    black-high:black
+  ; proof-theorem
+; define-sub-module
 
 : black-high:balance,red
   ({tree #left #right key value ##key-value natural #high}
@@ -164,4 +185,47 @@
   black-high:insert,help
   black-high:blacken-root
   end
+; proof-theorem
+
+: map
+  import
+    preliminaries
+; define-module
+
+: map
+  ({type #type #type'}
+   (:type -> :type') #function
+    :type list -> :type' list)
+  * :function null
+  | null
+  * :function :car :cdr cons
+  | :car :function apply
+    :function :cdr map cons
+; define-function
+
+: length ({type #type} :type list natural -> type)
+  length:null
+  (---------->
+   null 0 length)
+  length:cons
+  (natural #length
+   :type #car
+   :type list #cdr
+   :cdr :length length
+   ------------------->
+   :car :cdr cons :length add1 length)
+; introduce-axiom
+
+: length:map,inversion
+  ({type #type #type'}
+   (:type -> :type') #function
+   :type list #list natural #length
+   list :length length
+   ------------------->
+   :list map :function apply :length length)
+  * :function
+    null :length length
+  | {!!}
+  * f (x :: l) (S n) (L:: .n .x .l h)
+  | {!!}
 ; proof-theorem

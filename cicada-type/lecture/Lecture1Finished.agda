@@ -60,11 +60,11 @@ module lecture.Lecture1Finished where
     balance-bh-red : {l : Tree} {kv : Key × Value} {r : Tree} {n : Nat}
                 -> HasBH l n -> HasBH r n
                 -> HasBH (balance l Red kv r) n
-    balance-bh-red = ?
+    balance-bh-red = {!!}
     balance-bh-black : {l : Tree} {kv : Key × Value} {r : Tree} {n : Nat}
                 -> HasBH l n -> HasBH r n
                 -> HasBH (balance l Black kv r) (S n)
-    balance-bh-black = ?
+    balance-bh-black = {!!}
 
     ins-bh : {t : Tree} (kv : Key × Value) {n : Nat} -> HasBH t n -> HasBH (ins t kv) n
     ins-bh (k , v) HBH-Empty = HBH-Node-Red HBH-Empty HBH-Empty

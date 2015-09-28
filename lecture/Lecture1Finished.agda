@@ -71,13 +71,20 @@ module lecture.Lecture1Finished where
       blackenRoot-bh (Node l Red kv r) n (HBH-Node-Red .n .l .r .kv hl hr) = S n , (HBH-Node-Black n l r kv hl hr)
       blackenRoot-bh (Node l Black kv r) (S n) (HBH-Node-Black .n .l .r .kv hl hr) = S n , (HBH-Node-Black n l r kv hl hr)
 
+      black-high:blacken-root : (t : Tree) (n : Nat) -> HasBH t n -> Σ \ (m : Nat) -> (HasBH (blackenRoot t) m)
+      black-high:blacken-root .Empty .1 HBH-Empty
+                            = 1 , HBH-Empty
+      black-high:blacken-root .(Node l Red kv r) n (HBH-Node-Red .n l r kv h h₁)
+                            =  (S n) , (HBH-Node-Black n l r kv h h₁)
+      black-high:blacken-root .(Node l Black kv r) .(S n) (HBH-Node-Black n l r kv h h₁)
+                            = (S n) , (HBH-Node-Black n l r kv h h₁)
+
       -- Proof 2: case-analyze h
 
       blackenRoot-bh2 : (t : Tree) (n : Nat) -> HasBH t n -> Σ \m -> (HasBH (blackenRoot t) m)
       blackenRoot-bh2 .Empty .1 HBH-Empty = _ , HBH-Empty
       blackenRoot-bh2 .(Node l Red kv r) .n (HBH-Node-Red n l r kv hl hr) = _ , (HBH-Node-Black n l r kv hl hr)
       blackenRoot-bh2 .(Node l Black kv r) .(S n) (HBH-Node-Black n l r kv hl hr) = S n , HBH-Node-Black n l r kv hl hr
-
 
     -- implicit arguments
 
@@ -111,11 +118,11 @@ module lecture.Lecture1Finished where
 
       ins-bh : {t : Tree} (kv : Key × Value) {n : Nat} -> HasBH t n -> HasBH (ins t kv) n
       ins-bh (k , v) HBH-Empty = HBH-Node-Red HBH-Empty HBH-Empty
-      ins-bh (k , v) (HBH-Node-Red{n}{l}{r}{(k' , v')} hl hr) with compare k k'
+      ins-bh (k , v) (HBH-Node-Red {n} {l} {r} {k' , v'} hl hr) with compare k k'
       ins-bh (k , v) (HBH-Node-Red {n} {l} {r} {k' , v'} hl hr) | Less = balance-bh-red (ins-bh _ hl) hr
       ins-bh (k , v) (HBH-Node-Red {n} {l} {r} {k' , v'} hl hr) | Equal = HBH-Node-Red hl hr
       ins-bh (k , v) (HBH-Node-Red {n} {l} {r} {k' , v'} hl hr) | Greater = balance-bh-red hl (ins-bh _ hr)
-      ins-bh (k , v) (HBH-Node-Black {n}{l}{r} {k' , v'} hl hr) with compare k k'
+      ins-bh (k , v) (HBH-Node-Black {n} {l} {r} {k' , v'} hl hr) with compare k k'
       ins-bh (k , v) (HBH-Node-Black {n} {l} {r} {k' , v'} hl hr) | Less = balance-bh-black (ins-bh _ hl) hr
       ins-bh (k , v) (HBH-Node-Black {n} {l} {r} {k' , v'} hl hr) | Equal = HBH-Node-Black hl hr
       ins-bh (k , v) (HBH-Node-Black {n} {l} {r} {k' , v'} hl hr) | Greater = balance-bh-black hl (ins-bh _ hr)
