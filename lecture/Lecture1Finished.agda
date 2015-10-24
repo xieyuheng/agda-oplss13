@@ -1,3 +1,4 @@
+open import Agda.Primitive
 open import Preliminaries
 
 module lecture.Lecture1Finished where
@@ -13,6 +14,22 @@ module lecture.Lecture1Finished where
     data Tree : Set where
       Empty : Tree
       Node : Tree -> Color -> (Key × Value) -> Tree -> Tree
+
+    data equal? {l : Level} {A : Set l} (M : A) : A -> Set l where
+      reflexive : (equal? M M)
+
+    aaa : Color -> Color
+    aaa Red = Red
+    aaa Black = Red
+
+    k1 : (equal? (aaa Red) (aaa Black))
+    k1 = reflexive
+
+    k2 : (equal? (aaa Black) (aaa Red))
+    k2 = reflexive
+
+    k3 : (equal? (aaa Red) (aaa Red))
+    k3 = {!k2 o k1!}
 
     balance : Tree -> Color -> (Key × Value) -> Tree -> Tree
     balance (Node (Node a Red x b) Red y c) Black z d =
@@ -31,6 +48,11 @@ module lecture.Lecture1Finished where
     ... | Equal = Node l c (k , v) r
     ... | Less = balance (ins l (k , v)) c (k' , v') r
     ... | Greater = balance l c (k' , v') (ins r (k , v))
+
+
+    ins1 : Tree -> (Key × Value) -> Tree
+    ins1 Empty kv = {!!}
+    ins1 (Node t x x₁ t₁) kv = {!!}
 
     blackenRoot : Tree -> Tree
     blackenRoot Empty = Empty

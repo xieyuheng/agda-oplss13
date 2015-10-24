@@ -2,9 +2,9 @@ open import Preliminaries
 
 module lecture.Lecture3Finish where
 
-  open Vector using (Vec ; [] ; _::_)
-  open Nat using (_+_)
-  open List using (_++_ ; [_] ; ++-assoc)
+  -- open Vector using (Vec ; [] ; _::_)
+  -- open Nat using (_+_)
+  -- open List using (_++_ ; [_] ; ++-assoc)
 
   String = List Char
 
