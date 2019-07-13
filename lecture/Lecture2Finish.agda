@@ -9,34 +9,62 @@ module lecture.Lecture2Finish where
     map f (x :: xs) = f x :: map f xs
 
     module ExplicitArgs where
+
       data Length {A : Set} : List A -> Nat -> Set where
         L[] : Length [] 0
-        L:: : (n : Nat) (x : A) (xs : List A) -> Length xs n -> Length (x :: xs) (S n)
+        L:: : (n : Nat)
+              (x : A)
+              (xs : List A)
+           -> Length xs n
+           -> Length (x :: xs) (S n)
 
-      map-length : {A B : Set} (f : A -> B) (xs : List A) (n : Nat)
-                 -> Length xs n
-                 -> Length (map f xs) n
-      (map-length f .[] .0
+      map-length : {A B : Set}
+                   (f : A -> B)
+                   (xs : List A)
+                   (n : Nat)
+                -> Length xs n
+                -> Length (map f xs) n
+      (map-length   f
+                    .[]
+                    .0
                   L[])
                 = L[]
-      (map-length f .(x :: xs) .(S n)
-                  (L:: n x xs
+      (map-length   f
+                    .(x :: xs)
+                    .(S n)
+                  (L::   n
+                         x
+                         xs
                        h))
-               = (L:: n (f x) (map f xs)
-                      (map-length f xs n
+               = (L::   n
+                        (f x)
+                        (map f xs)
+                      (map-length   f
+                                    xs
+                                    n
                                   h))
 
     module ImplicitArgs where
 
       data Length {A : Set} : List A -> Nat -> Set where
         L[] : Length [] 0
-        L:: : {n : Nat} {x : A} {xs : List A} -> Length xs n -> Length (x :: xs) (S n)
+        L:: : {n : Nat}
+              {x : A}
+              {xs : List A}
+           -> Length xs n
+           -> Length (x :: xs) (S n)
 
-      map-length : {A B : Set} {f : A -> B} {xs : List A} {n : Nat}
-                 -> Length xs n
-                 -> Length (map f xs) n
+      map-length : {A B : Set}
+                   {f : A -> B}
+                   {xs : List A}
+                   {n : Nat}
+                -> Length xs n
+                -> Length (map f xs) n
       map-length L[] = L[]
       map-length (L:: h) = (L:: (map-length h))
+
+
+
 
   module RBT (Key : Set) (compare : Key -> Key -> Order) (Value : Set) where
 

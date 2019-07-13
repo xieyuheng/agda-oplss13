@@ -19,34 +19,34 @@ module lecture.Lecture2Start where
       map-length f xs n h = {!!}
 
     module ImplicitArgs where
-    
+
       data Length {A : Set} : List A → Nat → Set where
         L[] : Length [] 0
         L:: : {n : Nat} {x : A} {xs : List A} → Length xs n → Length (x :: xs) (S n)
 
-      map-length : {A B : Set} {f : A → B} {xs : List A} {n : Nat} 
+      map-length : {A B : Set} {f : A → B} {xs : List A} {n : Nat}
                  → Length xs n
                  → Length (map f xs) n
       map-length L[] = L[]
       map-length (L:: lxs) = L:: (map-length lxs)
 
 
-  module RBT (Key : Set) (compare : Key -> Key -> Order) (Value : Set) where 
+  module RBT (Key : Set) (compare : Key -> Key -> Order) (Value : Set) where
 
     data Color : Set where
       Red : Color
       Black : Color
-  
+
     data Tree : Set where
       Empty : Tree
       Node : Tree -> Color → (Key × Value) -> Tree -> Tree
 
     balance : Tree → Color → (Key × Value) → Tree → Tree
-    balance (Node (Node a Red x b) Red y c) Black z d =  
+    balance (Node (Node a Red x b) Red y c) Black z d =
             Node (Node a Black x b) Red y (Node c Black z d)
-    balance (Node a Red x (Node b Red y c)) Black z d = 
+    balance (Node a Red x (Node b Red y c)) Black z d =
             Node (Node a Black x b) Red y (Node c Black z d)
-    balance a Black x (Node (Node b Red y c) Red z d) = 
+    balance a Black x (Node (Node b Red y c) Red z d) =
             Node (Node a Black x b) Red y (Node c Black z d)
     balance a Black x (Node b Red y (Node c Red z d)) =
             Node (Node a Black x b) Red y (Node c Black z d)
@@ -69,12 +69,12 @@ module lecture.Lecture2Start where
     data HasBH : Tree → Nat → Set where
       HBH-Empty : HasBH Empty 1
       HBH-Node-Red  : {n : Nat} {l r : Tree} {kv : Key × Value}
-                    → HasBH l n 
-                    → HasBH r n 
+                    → HasBH l n
+                    → HasBH r n
                     → HasBH (Node l Red kv r) n
       HBH-Node-Black  : {n : Nat} {l r : Tree} {kv : Key × Value}
-                    → HasBH l n 
-                    → HasBH r n 
+                    → HasBH l n
+                    → HasBH r n
                     → HasBH (Node l Black kv r) (S n)
 
     blackenRoot-bh : {t : Tree} {n : Nat} → HasBH t n → Σ \m → (HasBH (blackenRoot t) m)
@@ -83,22 +83,22 @@ module lecture.Lecture2Start where
     blackenRoot-bh (HBH-Node-Black hl hr) = _ , HBH-Node-Black hl hr
 
 
-  module RBTIntrinsic (Key : Set) (compare : Key → Key → Order) (Value : Set) where 
+  module RBTIntrinsic (Key : Set) (compare : Key → Key → Order) (Value : Set) where
 
     data Color : Set where
       Red : Color
       Black : Color
-  
+
     data Tree : Set where
       Empty : Tree
       Node : Tree → Color → (Key × Value) → Tree → Tree
 
     balance : Tree → Color → (Key × Value) → Tree → Tree
-    balance (Node (Node a Red x b) Red y c) Black z d =  
+    balance (Node (Node a Red x b) Red y c) Black z d =
             Node (Node a Black x b) Red y (Node c Black z d)
-    balance (Node a Red x (Node b Red y c)) Black z d = 
+    balance (Node a Red x (Node b Red y c)) Black z d =
             Node (Node a Black x b) Red y (Node c Black z d)
-    balance a Black x (Node (Node b Red y c) Red z d) = 
+    balance a Black x (Node (Node b Red y c) Red z d) =
             Node (Node a Black x b) Red y (Node c Black z d)
     balance a Black x (Node b Red y (Node c Red z d)) =
             Node (Node a Black x b) Red y (Node c Black z d)
@@ -117,5 +117,3 @@ module lecture.Lecture2Start where
 
     insert : Tree → Key × Value → Tree
     insert t kv = blackenRoot (ins t kv)
-
-
